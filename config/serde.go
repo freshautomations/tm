@@ -141,13 +141,13 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 	}
 
 	// Find chains data
-	chains := make(map[string]ChainConfig)
+	chains := make(map[string]*ChainConfig)
 	for _, key := range meta.Undecoded() {
 		keySplit := strings.Split(key.String(), ".")
 		switch len(keySplit) {
 		case 0:
 			return fmt.Errorf("invalid key %s", key)
-		case 1:
+		case 1: // whole chain
 			chainName := keySplit[0]
 			if meta.Type(key.String()) != "Hash" {
 				continue // not a [chain] definition but some random key
@@ -161,6 +161,7 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 				var hdpath string
 				var binary string
 				var home string
+				var denom string
 				stopMaintain, err = extractBool(chainItem["stop_maintain"])
 				if err != nil {
 					return err
@@ -177,16 +178,21 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 				if err != nil {
 					return err
 				}
-				emptyNodes := make(map[string]Node)
-				chains[chainName] = ChainConfig{
+				denom, err = extractString(chainItem["denom"])
+				if err != nil {
+					return err
+				}
+				emptyNodes := make(map[string]*Node)
+				chains[chainName] = &ChainConfig{
 					HDPath:       hdpath,
 					Binary:       binary,
 					Home:         home,
 					StopMaintain: stopMaintain,
 					Nodes:        emptyNodes,
+					denom:        denom,
 				}
 			}
-		case 2:
+		case 2: // one node
 			chainName := keySplit[0]
 			nodeName := keySplit[1]
 			if _, ok := chains[chainName]; !ok {
@@ -217,7 +223,7 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 						return err
 					}
 					if port > 65535 {
-						return fmt.Errorf("invalid port %s at %s.%s", chainName, nodeName)
+						return fmt.Errorf("invalid port %d at %s.%s", port, chainName, nodeName)
 					}
 					connections, err = extractStringSlice(nodeItem["connections"])
 					if err != nil {
@@ -235,7 +241,7 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 					if err != nil {
 						return err
 					}
-					chains[chainName].Nodes[nodeName] = Node{
+					chains[chainName].Nodes[nodeName] = &Node{
 						Validator:    validator,
 						Binary:       binary,
 						Home:         home,
@@ -251,7 +257,7 @@ func (cfg *Config) CustomUnmarshal(data []byte) error {
 		}
 	}
 	cfg.Chains = chains
-	cfg.Validate()
-	cfg.SetPorts()
+	cfg.validate()
+	cfg.setPorts()
 	return nil
 }
