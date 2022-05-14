@@ -115,7 +115,9 @@ func KeysAdd(binary string, home string, name string, hdpath string, mnemonics s
 		ux.Debug("did not add key %s to %s", name, home)
 		return
 	}
-	utils.WriteFile(filepath.FromSlash(fmt.Sprintf("%s/config/mnemonics/%s.json", home, name)), output)
+	if err = os.WriteFile(filepath.FromSlash(fmt.Sprintf("%s/config/mnemonics/%s.json", home, name)), []byte(output), fs.ModePerm); err != nil {
+		ux.Fatal(err.Error())
+	}
 	ux.Debug("successful key add %s to chain %s", name, home)
 }
 
