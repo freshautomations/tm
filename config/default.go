@@ -1,8 +1,8 @@
 package config
 
 import (
-	"tm/m/v2/tmconfig"
-	"tm/m/v2/utils"
+	"tm/tm/v2/tmconfig"
+	"tm/tm/v2/utils"
 )
 
 func NewDefaultConfig() Config {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"mvdan.cc/sh/v3/shell"
 	"strings"
-	"tm/m/v2/utils"
-	"tm/m/v2/ux"
+	"tm/tm/v2/utils"
+	"tm/tm/v2/ux"
 )
 
 // validate checks the node logic in the configuration file.

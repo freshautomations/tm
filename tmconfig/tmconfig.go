@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
-	"tm/m/v2/ux"
+	"tm/tm/v2/ux"
 )
 
 // Filename describes the tm config file path.

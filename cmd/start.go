@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"tm/m/v2/context"
-	"tm/m/v2/startstop"
+	"tm/tm/v2/context"
+	"tm/tm/v2/startstop"
 )
 
 var startCmd = &cobra.Command{

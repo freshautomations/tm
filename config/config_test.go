@@ -3,9 +3,9 @@ package config
 import (
 	"path/filepath"
 	"testing"
-	"tm/m/v2/tmconfig"
-	"tm/m/v2/utils"
-	"tm/m/v2/ux"
+	"tm/tm/v2/tmconfig"
+	"tm/tm/v2/utils"
+	"tm/tm/v2/ux"
 )
 
 func newDebugConfig() Config {

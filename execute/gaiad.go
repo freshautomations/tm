@@ -12,9 +12,9 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	"tm/m/v2/consts"
-	"tm/m/v2/utils"
-	"tm/m/v2/ux"
+	"tm/tm/v2/consts"
+	"tm/tm/v2/utils"
+	"tm/tm/v2/ux"
 )
 
 func execute(binary string, arg ...string) (string, error) {

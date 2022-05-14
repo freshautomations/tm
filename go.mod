@@ -1,4 +1,4 @@
-module tm/m/v2
+module tm/tm/v2
 
 go 1.18
 

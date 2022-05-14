@@ -4,7 +4,7 @@ import (
 	"mvdan.cc/sh/v3/shell"
 	"os/exec"
 	"path/filepath"
-	"tm/m/v2/ux"
+	"tm/tm/v2/ux"
 )
 
 func FindOSBinary(name string) (result string) {

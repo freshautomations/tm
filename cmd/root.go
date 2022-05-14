@@ -6,8 +6,8 @@ import (
 	"github.com/spf13/viper"
 	"os"
 	"path/filepath"
-	"tm/m/v2/ux"
-	version "tm/m/v2/version"
+	"tm/tm/v2/ux"
+	version "tm/tm/v2/version"
 )
 
 var rootCmd = &cobra.Command{

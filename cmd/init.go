@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"tm/m/v2/config"
-	"tm/m/v2/context"
-	"tm/m/v2/initialize"
-	"tm/m/v2/tmconfig"
+	"tm/tm/v2/config"
+	"tm/tm/v2/context"
+	"tm/tm/v2/initialize"
+	"tm/tm/v2/tmconfig"
 )
 
 var initCmd = &cobra.Command{

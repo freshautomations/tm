@@ -2,8 +2,8 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"tm/m/v2/ux"
-	"tm/m/v2/version"
+	"tm/tm/v2/ux"
+	"tm/tm/v2/version"
 )
 
 var versionCmd = &cobra.Command{

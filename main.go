@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-	"tm/m/v2/cmd"
+	"tm/tm/v2/cmd"
 )
 
 func main() {

@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"syscall"
-	"tm/m/v2/consts"
-	"tm/m/v2/ux"
+	"tm/tm/v2/consts"
+	"tm/tm/v2/ux"
 )
 
 func GetPid(home string) *int {

@@ -4,7 +4,7 @@ import (
 	"io/fs"
 	"io/ioutil"
 	"os"
-	"tm/m/v2/ux"
+	"tm/tm/v2/ux"
 )
 
 // Save tm config file to disk

@@ -10,4 +10,7 @@ BUILD_FLAGS := -trimpath -mod=readonly -ldflags "-s -w -X tm/m/v2/version.Versio
 build:
 	go build $(BUILD_FLAGS) -o build/tm
 
-.PHONY: build
+install:
+	go install $(BUILD_FLAGS)
+
+.PHONY: build install

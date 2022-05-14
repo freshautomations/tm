@@ -3,7 +3,7 @@ package utils
 import (
 	"github.com/spf13/viper"
 	"strings"
-	"tm/m/v2/ux"
+	"tm/tm/v2/ux"
 )
 
 func SetConfigEntry(file string, key string, value interface{}) {
