@@ -15,7 +15,7 @@ var stopCmd = &cobra.Command{
 		// Load chain config
 		ctx := context.New(args)
 
-		// Execute start
+		// Execute stop
 		startstop.Stop(ctx)
 	},
 }

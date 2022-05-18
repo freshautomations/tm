@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"tm/tm/v2/utils"
 	"tm/tm/v2/ux"
 )
 
@@ -40,7 +41,7 @@ func FindConfigFilename() Filename {
 			}
 			configFilePath = filepath.Join(configHome, "config.toml")
 		} else {
-			configFilePath = os.ExpandEnv(filepath.FromSlash("$HOME/.tm/config.toml"))
+			configFilePath = os.ExpandEnv(utils.GetSlashPath("$HOME/.tm/config.toml"))
 			if err != nil {
 				ux.Fatal("could not find default path to config %s", viper.GetString("config"))
 			}

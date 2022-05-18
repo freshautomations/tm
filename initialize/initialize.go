@@ -224,7 +224,9 @@ func configure(ctx context.Context, fullNodename string) {
 		appAddress := fmt.Sprintf("tcp://0.0.0.0:%d", ctx.Config.GetAppPort(fullNodename))
 		grpcAddress := fmt.Sprintf("0.0.0.0:%d", ctx.Config.GetGRPCPort(fullNodename))
 		grpcWebAddress := fmt.Sprintf("0.0.0.0:%d", ctx.Config.GetGRPCWEBPort(fullNodename))
-		utils.SetConfigEntry(appToml, "minimum-gas-prices", "0")
+		minimumGasPrices := fmt.Sprintf("0%s", ctx.Config.GetDenom(fullNodename))
+
+		utils.SetConfigEntry(appToml, "minimum-gas-prices", minimumGasPrices)
 		utils.SetConfigEntry(appToml, "api.address", appAddress)
 		utils.SetConfigEntry(appToml, "api.enable", true)
 		utils.SetConfigEntry(appToml, "api.swagger", true)

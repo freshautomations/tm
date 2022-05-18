@@ -6,16 +6,20 @@ import (
 	"tm/tm/v2/startstop"
 )
 
-var statusCmd = &cobra.Command{
-	Use:     "status",
-	Aliases: []string{"stat"},
-	Short:   "Get the status of one or more node(s) or testnet(s)",
+var (
+	flagf bool
+	flagF bool
+)
+
+var logCmd = &cobra.Command{
+	Use:   "log",
+	Short: "Get the log of one or more node(s) or testnet(s)",
 	Run: func(cmd *cobra.Command, args []string) {
 
 		// Load chain config
 		ctx := context.New(args)
 
-		// Execute status
-		startstop.Status(ctx)
+		// Execute log
+		startstop.Log(ctx)
 	},
 }

@@ -145,15 +145,15 @@ func (cfg Config) GetHome(nodeFullName string) string {
 	nodeName := nodeFullnameSplit[1]
 	result := ""
 	if node.Home != "" {
-		result = filepath.FromSlash(node.Home)
+		result = utils.GetSlashPath(node.Home)
 	} else {
 		if chain.Home != "" {
-			result = filepath.FromSlash(fmt.Sprintf("%s/%s", chain.Home, nodeName))
+			result = utils.GetSlashPath("%s/%s", chain.Home, nodeName)
 		} else {
 			if cfg.Home != "" {
-				result = filepath.FromSlash(fmt.Sprintf("%s/%s/%s", cfg.Home, chainName, nodeName))
+				result = utils.GetSlashPath("%s/%s/%s", cfg.Home, chainName, nodeName)
 			} else {
-				result = filepath.FromSlash(fmt.Sprintf("%s/%s/%s", tmconfig.FindConfigFilename().Dir, chainName, nodeName))
+				result = utils.GetSlashPath("%s/%s/%s", tmconfig.FindConfigFilename().Dir, chainName, nodeName)
 			}
 		}
 	}
@@ -174,9 +174,9 @@ func (cfg Config) GetChainHome(nodeFullName string) string {
 		result = chain.Home
 	} else {
 		if cfg.Home != "" {
-			result = filepath.FromSlash(fmt.Sprintf("%s/%s", cfg.Home, chainName))
+			result = utils.GetSlashPath("%s/%s", cfg.Home, chainName)
 		} else {
-			result = filepath.FromSlash(fmt.Sprintf("%s/%s", tmconfig.FindConfigFilename().Dir, chainName))
+			result = utils.GetSlashPath("%s/%s", tmconfig.FindConfigFilename().Dir, chainName)
 		}
 	}
 	expanded, err := shell.Expand(result, nil)
@@ -292,11 +292,11 @@ func (cfg Config) GetGRPCWEBPort(nodeFullName string) uint {
 }
 
 func (cfg Config) GetPath(fullNodename string, suffix string) string {
-	return filepath.FromSlash(fmt.Sprintf("%s/%s", cfg.GetHome(fullNodename), suffix))
+	return utils.GetSlashPath("%s/%s", cfg.GetHome(fullNodename), suffix)
 }
 
 func (cfg Config) GetChainPath(fullNodename string, suffix string) string {
-	return filepath.FromSlash(fmt.Sprintf("%s/%s", cfg.GetChainHome(fullNodename), suffix))
+	return utils.GetSlashPath("%s/%s", cfg.GetChainHome(fullNodename), suffix)
 }
 
 func (cfg Config) GetDenom(fullNodename string) string {

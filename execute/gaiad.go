@@ -7,7 +7,6 @@ import (
 	"io/ioutil"
 	"os"
 	"os/exec"
-	"path/filepath"
 	"strconv"
 	"strings"
 	"syscall"
@@ -39,27 +38,10 @@ func executeWithStdIn(stdin string, binary string, arg ...string) (string, error
 	return stdout.String(), nil
 }
 
-func startupChecker(checker chan int, process *os.Process) {
+func startupChecker(checker chan int, process *os.Process, logfile *os.File) {
 	_, _ = process.Wait()
+	_ = logfile.Close()
 	checker <- 1
-}
-
-func executeStart(binary string, arg ...string) (int, error) {
-	cmd := exec.Command(binary, arg...)
-	ux.Debug("%s %s\n", binary, strings.Join(arg, " "))
-	err := cmd.Start()
-	if err != nil {
-		return 0, err
-	}
-	checker := make(chan int, 1)
-	go startupChecker(checker, cmd.Process)
-	for i := 0; i < consts.StartupWaitTime; i++ {
-		time.Sleep(time.Second)
-		if len(checker) > 0 {
-			return 0, fmt.Errorf("PID %d stopped", cmd.Process.Pid)
-		}
-	}
-	return cmd.Process.Pid, nil
 }
 
 func fatal(out string, err error) {
@@ -115,7 +97,7 @@ func KeysAdd(binary string, home string, name string, hdpath string, mnemonics s
 		ux.Debug("did not add key %s to %s", name, home)
 		return
 	}
-	if err = os.WriteFile(filepath.FromSlash(fmt.Sprintf("%s/config/mnemonics/%s.json", home, name)), []byte(output), fs.ModePerm); err != nil {
+	if err = os.WriteFile(utils.GetSlashPath("%s/config/mnemonics/%s.json", home, name), []byte(output), fs.ModePerm); err != nil {
 		ux.Fatal(err.Error())
 	}
 	ux.Debug("successful key add %s to chain %s", name, home)
@@ -184,12 +166,32 @@ func ShowNodeID(binary string, home string) string {
 }
 
 func Start(binary string, home string) (int, error) {
-	args := []string{"start", "--home", home}
+	arg := []string{"start", "--home", home}
 
-	pid, err := executeStart(binary, args...)
+	logfile, err := os.Create(consts.GetLog(home))
 	if err != nil {
 		return 0, err
 	}
+
+	cmd := exec.Command(binary, arg...)
+	cmd.Env = os.Environ()
+	cmd.Dir = home
+	cmd.Stdout = logfile
+	cmd.Stderr = logfile
+	ux.Debug("%s %s\n", binary, strings.Join(arg, " "))
+	err = cmd.Start()
+	if err != nil {
+		return 0, err
+	}
+	checker := make(chan int, 1)
+	go startupChecker(checker, cmd.Process, logfile)
+	for i := 0; i < consts.StartupWaitTime; i++ {
+		time.Sleep(time.Second)
+		if len(checker) > 0 {
+			return 0, fmt.Errorf("PID %d stopped", cmd.Process.Pid)
+		}
+	}
+	pid := cmd.Process.Pid
 	pidString := strconv.Itoa(pid)
 	err = ioutil.WriteFile(consts.GetPid(home), []byte(pidString), fs.ModePerm)
 	ux.Debug("process %s started and written to %s", pidString, consts.GetPid(home))
@@ -209,4 +211,16 @@ func Stop(home string) error {
 	}
 	_ = GetPid(home)
 	return nil
+}
+
+func Reset(binary string, home string) (string, error) {
+	// Todo: some binaries have moved unsafe-reset-all under Tendermint, some haven't.
+	args := []string{"tendermint", "unsafe-reset-all", "--home", home}
+
+	out, err := execute(binary, args...)
+	if err != nil {
+		return "", err
+	}
+	ux.Debug("process %s started", consts.GetPid(home))
+	return out, err
 }

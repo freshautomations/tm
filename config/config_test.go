@@ -1,7 +1,6 @@
 package config
 
 import (
-	"path/filepath"
 	"testing"
 	"tm/tm/v2/tmconfig"
 	"tm/tm/v2/utils"
@@ -11,7 +10,7 @@ import (
 func newDebugConfig() Config {
 	cfg := Config{
 		Binary:       utils.FindOSBinary("gaiad"),
-		Home:         filepath.FromSlash("$HOME/.tm"),
+		Home:         utils.GetSlashPath("$HOME/.tm"),
 		StopMaintain: false,
 		Wallets: []Wallet{{
 			Name:      "wallet1",

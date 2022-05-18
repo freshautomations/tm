@@ -7,6 +7,8 @@ import (
 	"tm/tm/v2/ux"
 )
 
+// FindOSBinary does shell expansion on a string, then checks PATH and returns the absolute path of the binary.
+// For example: $GAIAD_BINARY -> "gaiad" -> "/usr/bin/gaiad"
 func FindOSBinary(name string) (result string) {
 	expanded, err := shell.Expand(name, nil)
 	if err != nil {

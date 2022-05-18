@@ -1,5 +1,7 @@
 package utils
 
+// ConfigEntry gets and sets TOML and JSON configuration entries for
+
 import (
 	"github.com/spf13/viper"
 	"strings"
