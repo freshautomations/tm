@@ -1,6 +1,8 @@
 package config
 
 import (
+	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"mvdan.cc/sh/v3/shell"
@@ -8,6 +10,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"tm/tm/v2/consts"
 	"tm/tm/v2/tmconfig"
 	"tm/tm/v2/utils"
 	"tm/tm/v2/ux"
@@ -337,4 +340,23 @@ func (cfg Config) GetConnections(fullNodename string) []string {
 		}
 	}
 	return result
+}
+
+func (cfg Config) GetMnemonics(chainName string, walletName string) string {
+	home := cfg.GetChainHome(chainName)
+	file, err := ioutil.ReadFile(consts.GetMnemonics(home, walletName))
+	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return ""
+		}
+		ux.Fatal("could not read mnemonics %s: %s", walletName, err)
+	}
+
+	var data utils.Keys
+	err = json.Unmarshal(file, &data)
+	if err != nil {
+		ux.Warn("could not unmarshal keys output from %s: %s", chainName, err)
+		ux.Warn("Output string: %s", string(file))
+	}
+	return data.Mnemonic
 }

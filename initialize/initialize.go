@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
+	"tm/tm/v2/consts"
 	"tm/tm/v2/context"
 	"tm/tm/v2/execute"
 	"tm/tm/v2/utils"
@@ -63,7 +64,7 @@ func runInit(ctx context.Context, fullNodename string) {
 			}
 		}
 	}
-	keysFolder := ctx.Config.GetChainPath(chainName, "config/mnemonics")
+	keysFolder := consts.GetMnemonicsDir(chainName)
 	err := os.Mkdir(keysFolder, fs.ModeDir|fs.ModePerm)
 	if err != nil && !errors.Is(err, os.ErrExist) {
 		ux.Fatal("could not create chain keys folder at %s", keysFolder)

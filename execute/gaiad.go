@@ -97,7 +97,7 @@ func KeysAdd(binary string, home string, name string, hdpath string, mnemonics s
 		ux.Debug("did not add key %s to %s", name, home)
 		return
 	}
-	if err = os.WriteFile(utils.GetSlashPath("%s/config/mnemonics/%s.json", home, name), []byte(output), fs.ModePerm); err != nil {
+	if err = os.WriteFile(consts.GetMnemonics(home, name), []byte(output), fs.ModePerm); err != nil {
 		ux.Fatal(err.Error())
 	}
 	ux.Debug("successful key add %s to chain %s", name, home)
@@ -222,5 +222,15 @@ func Reset(binary string, home string) (string, error) {
 		return "", err
 	}
 	ux.Debug("process %s started", consts.GetPid(home))
+	return out, err
+}
+
+func KeysList(binary string, home string) (string, error) {
+	args := []string{"keys", "list", "--home", home, "--keyring-backend", "test", "--output", "json"}
+
+	out, err := execute(binary, args...)
+	if err != nil {
+		return "", err
+	}
 	return out, err
 }
